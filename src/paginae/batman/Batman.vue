@@ -26,16 +26,18 @@ if (element) {
 
 <template>
     <div class="batman">
-    <div class="extra-nav">
+
+
+    <nav class="extra-nav flex flex-col sm:flex-row justify-between px-3">
     <RouterLink to="/">
     <House class="icon-home" />
     </RouterLink>
 
      <NavigationMenu>
-    <NavigationMenuList>
+    <NavigationMenuList class="flex flex-col sm:flex-row">
       <NavigationMenuItem>
       <a href="#" @click.prevent="scrollToSection('#')">
-      <NavigationMenuLink :class="navigationMenuTriggerStyle">
+      <NavigationMenuLink :class="[navigationMenuTriggerStyle(), 'text-md hover:bg-brand-purple hover:text-white transition-colors']">
       Portada
       </NavigationMenuLink>
       </a>
@@ -43,7 +45,7 @@ if (element) {
 
        <NavigationMenuItem>
       <a href="#vehiculis" @click.prevent="scrollToSection('#vehiculis')">
-      <NavigationMenuLink :class="navigationMenuTriggerStyle">
+      <NavigationMenuLink :class="[navigationMenuTriggerStyle(), 'text-md hover:bg-brand-purple hover:text-white transition-colors']">
       Vehículos
       </NavigationMenuLink>
       </a>
@@ -51,7 +53,7 @@ if (element) {
        
        <NavigationMenuItem>
       <a href="#videre" @click.prevent="scrollToSection('videre')">
-      <NavigationMenuLink :class="navigationMenuTriggerStyle">
+      <NavigationMenuLink :class="[navigationMenuTriggerStyle(), 'text-md hover:bg-brand-purple hover:text-white transition-colors']">
       Imágenes
       </NavigationMenuLink>
       </a>
@@ -59,7 +61,7 @@ if (element) {
 
        <NavigationMenuItem>
       <a href="#contactus" @click.prevent="scrollToSection('contactus')">
-      <NavigationMenuLink :class="navigationMenuTriggerStyle">
+      <NavigationMenuLink :class="[navigationMenuTriggerStyle(), 'text-md hover:bg-brand-purple hover:text-white transition-colors']">
       Contacto
       </NavigationMenuLink>
       </a>
@@ -68,8 +70,7 @@ if (element) {
 
     </NavigationMenuList>
   </NavigationMenu>
-
-    </div>
+    </nav>
     
 
     <header class="titulus">

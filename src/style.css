@@ -14,7 +14,6 @@ body {
 
 @custom-variant dark (&:is(.dark *));
 
-
 @theme inline {
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -64,7 +63,6 @@ body {
 
 /* Layout */
 --container-page: 1400px;
-
 
 }
 

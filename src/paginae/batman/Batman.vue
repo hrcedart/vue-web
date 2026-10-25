@@ -1,133 +1,229 @@
 <script lang="ts" setup>
-import { House, Menu } from '@lucide/vue';
+import { House, Menu } from "@lucide/vue";
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
   navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu'
-import CarrusImaginum from '@/components/CarrusImaginum.vue';
-import { scrollToSection } from '@/utils/scrollToSection';
-import { onMounted, ref } from 'vue';
-import { Toggle } from '@/components/ui/toggle'
+} from "@/components/ui/navigation-menu";
+import CarrusImaginum from "@/components/CarrusImaginum.vue";
+import { scrollToSection } from "@/utils/scrollToSection";
+import { onMounted, ref } from "vue";
+import { Toggle } from "@/components/ui/toggle";
 
-const photos = ["justice", "arkham", "superman", "varios", "villana", "villano", "grupo", "robin", "anne", "joker", "resplandor", "cat", "gafas", "league", "fondoVerde"];
+const photos = [
+  "justice",
+  "arkham",
+  "superman",
+  "varios",
+  "villana",
+  "villano",
+  "grupo",
+  "robin",
+  "anne",
+  "joker",
+  "resplandor",
+  "cat",
+  "gafas",
+  "league",
+  "fondoVerde",
+];
 
-const videreMenu = ref<boolean>(true)
+interface Coordinatas {
+  x: number;
+  y: number;
+}
+
+const videreMenu = ref<boolean>(true);
+
+const mousePositione = ref<Coordinatas>({ x: 0, y: 0 });
 
 const handleResize = () => {
   if (window.innerWidth <= 640) {
-    videreMenu.value = false
+    videreMenu.value = false;
   } else {
-    videreMenu.value = true
+    videreMenu.value = true;
   }
-}
+};
 
 onMounted(() => {
-  handleResize()
-  window.addEventListener('resize', handleResize)
-})
+  handleResize();
+  window.addEventListener("resize", handleResize);
+});
 
+onMounted(() => {
+  window.removeEventListener("resize", handleResize);
+});
+
+const cumMouseMove = (e: MouseEvent) => {
+  const rect = (e.target as HTMLElement).getBoundingClientRect();
+
+  const centerX = rect.left + rect.width / 2;
+  const centerY = rect.top + rect.height / 2;
+
+  const mouseX = e.clientX - rect.left;
+  const mouseY = e.clientY - rect.top;
+
+  mousePositione.value = {
+    x: (centerX - mouseX) * 0.1,
+    y: (centerY - mouseY) * 0.1,
+  };
+};
+const cumMouseLeave = () => {
+  mousePositione.value = {
+    x: 0,
+    y: 0,
+  };
+};
 </script>
 
 <template>
-    <div class="batman">
-      
-      <Toggle
-        class="fixed top-2 right-4 z-50 bg-slate-500 sm:hidden"
-        @click="videreMenu = !videreMenu"
-      >
-        <Menu />
-      </Toggle>
+  <div class="batman">
+    <Toggle
+      class="fixed top-2 right-4 z-50 bg-slate-500 sm:hidden"
+      @click="videreMenu = !videreMenu"
+    >
+      <Menu />
+    </Toggle>
 
-      <nav v-if="videreMenu" class="extra-nav flex flex-col sm:flex-row justify-between px-3">
-        <RouterLink to="/">
-          <House class="icon-home" />
-        </RouterLink>
+    <nav
+      v-if="videreMenu"
+      class="extra-nav flex flex-col sm:flex-row justify-between px-3"
+    >
+      <RouterLink to="/">
+        <House class="icon-home" />
+      </RouterLink>
 
-        <NavigationMenu>
-          <NavigationMenuList class="flex flex-col sm:flex-row">
-            <NavigationMenuItem>
-              <a href="#" @click.prevent="scrollToSection('#')">
-            <NavigationMenuLink :class="[navigationMenuTriggerStyle(), 'text-md hover:bg-brand-purple hover:text-white transition-colors']">
-              Portada
-            </NavigationMenuLink>
-          </a>
-        </NavigationMenuItem>
+      <NavigationMenu>
+        <NavigationMenuList class="flex flex-col sm:flex-row">
+          <NavigationMenuItem>
+            <a href="#" @click.prevent="scrollToSection('#')">
+              <NavigationMenuLink
+                :class="[
+                  navigationMenuTriggerStyle(),
+                  'text-md hover:bg-brand-purple hover:text-white transition-colors',
+                ]"
+              >
+                Portada
+              </NavigationMenuLink>
+            </a>
+          </NavigationMenuItem>
 
-        <NavigationMenuItem>
-          <a href="#vehiculis" @click.prevent="scrollToSection('#vehiculis')">
-           <NavigationMenuLink :class="[navigationMenuTriggerStyle(), 'text-md hover:bg-brand-purple hover:text-white transition-colors']">
-              Vehículos
-            </NavigationMenuLink>
-          </a>
-       </NavigationMenuItem>
-       
-      <NavigationMenuItem>
-        <a href="#videre" @click.prevent="scrollToSection('#videre')">
-          <NavigationMenuLink :class="[navigationMenuTriggerStyle(), 'text-md hover:bg-brand-purple hover:text-white transition-colors']">
-            Imágenes
-          </NavigationMenuLink>
-        </a>
-      </NavigationMenuItem>
+          <NavigationMenuItem>
+            <a href="#vehiculis" @click.prevent="scrollToSection('#vehiculis')">
+              <NavigationMenuLink
+                :class="[
+                  navigationMenuTriggerStyle(),
+                  'text-md hover:bg-brand-purple hover:text-white transition-colors',
+                ]"
+              >
+                Vehículos
+              </NavigationMenuLink>
+            </a>
+          </NavigationMenuItem>
 
-      <NavigationMenuItem>
-        <a href="#contactus" @click.prevent="scrollToSection('contactus')">
-          <NavigationMenuLink :class="[navigationMenuTriggerStyle(), 'text-md hover:bg-brand-purple hover:text-white transition-colors']">
-            Contacto
-          </NavigationMenuLink>
-        </a>
-      </NavigationMenuItem>
-    </NavigationMenuList>
-  </NavigationMenu>
-  </nav>
-    
-  <header class="titulus">
-    <h1>Batman</h1>
-    <div id="titulus-batman" class= "titulus-img"></div>
-    <p>Él puede tomar la decision que nadie más puede, la decisión correcta</p>
-  </header>
-    
-  <section id="vehiculis">
-    <div class="vehiculis-arca">
+          <NavigationMenuItem>
+            <a href="#videre" @click.prevent="scrollToSection('#videre')">
+              <NavigationMenuLink
+                :class="[
+                  navigationMenuTriggerStyle(),
+                  'text-md hover:bg-brand-purple hover:text-white transition-colors',
+                ]"
+              >
+                Imágenes
+              </NavigationMenuLink>
+            </a>
+          </NavigationMenuItem>
 
-      <div class="item unus">
-        <div class="notitia">
-          <h2>Avión</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vehicula vulputate elit eget fermentum. Ut laoreet ante lacus. Quisque ut tincidunt metus. Curabitur congue, arcu nec tempus sodales, neque sem ultrices mauris, eu tincidunt nibh nibh eu massa. Aenean rhoncus quis nibh ac facilisis.</p>
-          <small>Fabricado en 2005</small>
+          <NavigationMenuItem>
+            <a href="#contactus" @click.prevent="scrollToSection('contactus')">
+              <NavigationMenuLink
+                :class="[
+                  navigationMenuTriggerStyle(),
+                  'text-md hover:bg-brand-purple hover:text-white transition-colors',
+                ]"
+              >
+                Contacto
+              </NavigationMenuLink>
+            </a>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
+    </nav>
+
+    <header class="titulus">
+      <h1>Batman</h1>
+
+      <div
+        id="titulus-batman"
+        class="titulus-img"
+        @mousemove="cumMouseMove"
+        @mouseleave="cumMouseLeave"
+        :style="{
+          backgroundPositionX: `calc(50% + ${mousePositione.x}px)`,
+          backgroundPositionY: `calc(50% + ${mousePositione.y}px)`,
+          transition: 'background-position 0.1s ease-out',
+        }"
+      ></div>
+
+      <p>Él puede tomar la decision que nadie más puede, la decisión correcta</p>
+    </header>
+
+    <section id="vehiculis">
+      <div class="vehiculis-arca">
+        <div class="item unus">
+          <div class="notitia">
+            <h2>Avión</h2>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vehicula
+              vulputate elit eget fermentum. Ut laoreet ante lacus. Quisque ut tincidunt
+              metus. Curabitur congue, arcu nec tempus sodales, neque sem ultrices mauris,
+              eu tincidunt nibh nibh eu massa. Aenean rhoncus quis nibh ac facilisis.
+            </p>
+            <small>Fabricado en 2005</small>
+          </div>
+          <img src="/imagines/batman/avion.jpg" />
         </div>
-        <img src="/imagines/batman/avion.jpg"/>
+
+        <div class="item duo">
+          <div class="notitia">
+            <h2>Moto</h2>
+            <p>
+              Nulla aliquip cupidatat voluptate veniam nostrud aliquip sit enim officia.
+              Sit eu pariatur officia qui dolor adipisicing cupidatat. Sit consectetur et
+              eu ut esse laboris nulla.
+            </p>
+            <small>Fabricado en 2006</small>
+          </div>
+          <img src="/imagines/batman/moto.jpg" />
+        </div>
+
+        <div class="item tribus">
+          <div class="notitia">
+            <h2>Coche</h2>
+            <p>
+              Irure adipisicing est minim eu ad dolor. Eu ea commodo pariatur ut occaecat
+              in cupidatat reprehenderit ut laborum duis. Sunt minim ex fugiat
+              reprehenderit. Lorem consectetur reprehenderit commodo non
+            </p>
+            <small>Fabricado en 2007</small>
+          </div>
+          <img src="/imagines/batman/car.jpg" />
+        </div>
       </div>
 
-      <div class="item duo">
-        <div class="notitia">
-          <h2>Moto</h2>
-          <p>Nulla aliquip cupidatat voluptate veniam nostrud aliquip sit enim officia. Sit eu pariatur officia qui dolor adipisicing cupidatat. Sit consectetur et eu ut esse laboris nulla.</p>
-          <small>Fabricado en 2006</small>
-        </div>
-        <img src="/imagines/batman/moto.jpg"/>
+      <div class="vehiculis-titulus">
+        <h1>Vehículos de Batman</h1>
       </div>
-      
-      <div class="item tribus">
-        <div class="notitia">
-          <h2>Coche</h2>
-          <p>Irure adipisicing est minim eu ad dolor. Eu ea commodo pariatur ut occaecat in cupidatat reprehenderit ut laborum duis. Sunt minim ex fugiat reprehenderit. Lorem consectetur reprehenderit commodo non</p>
-          <small>Fabricado en 2007</small>
-        </div>
-        <img src="/imagines/batman/car.jpg"/>
-      </div>
-    </div>
+    </section>
 
-    <div class="vehiculis-titulus">
-      <h1>Vehículos de Batman</h1>
-    </div>
- </section>
-
-    <section id="videre" class="flex w-full justify-center min-h-[60vh] lg:min-h-[95vh] items-center bg-gray-900">
-      <CarrusImaginum 
-       :photos="photos"
+    <section
+      id="videre"
+      class="flex w-full justify-center min-h-[60vh] lg:min-h-[95vh] items-center bg-gray-900"
+    >
+      <CarrusImaginum
+        :photos="photos"
         basePath="/imagines/batman"
         :autoplayDelay="1500"
       />
@@ -135,23 +231,20 @@ onMounted(() => {
   </div>
 </template>
 
-
 <style scoped>
 .batman {
-    font-family: Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-
 .icon-home {
-    color: slateblue;
-    width: 3rem;
-    height: 3rem;
-
+  color: slateblue;
+  width: 3rem;
+  height: 3rem;
 }
 
 .icon-home:hover {
-    color: white;
-    background-color: slateblue;
+  color: white;
+  background-color: slateblue;
 }
 
 .extra-nav {
@@ -165,7 +258,7 @@ onMounted(() => {
   z-index: 1;
 }
 
-@media (min-width: 640px){
+@media (min-width: 640px) {
   .extra-nav {
     width: 100%;
     border-radius: 0;
@@ -178,7 +271,7 @@ onMounted(() => {
   background-size: 100% 100%;
   background-position: center center;
   background-image: url("../imagines/batman/batman.jpg");
-  min-height: 100vh;
+  aspect-ratio: 8/7;
 }
 
 .titulus-img:hover {
@@ -187,31 +280,31 @@ onMounted(() => {
 
 .titulus > h1 {
   position: absolute;
-  top: 63%;
+  top: calc(100vw * 0.5);
   width: 100%;
   text-align: center;
-  font-size: 5rem; 
+  font-size: 5rem;
   color: white;
-  pointer-events:none; 
+  pointer-events: none;
   font-family: batman;
 }
 
 .titulus > p {
   position: absolute;
-  top: 36%;
+  top: calc(100vw * 0.25);
   width: 100%;
   text-align: center;
   font-size: 2rem;
   color: white;
-  pointer-events:none;
+  pointer-events: none;
   font-family: batman;
   display: none;
 }
 
 @media (min-width: 768px) {
-    .titulus > p {
-        display: block;
-    }
+  .titulus > p {
+    display: block;
+  }
 }
 
 #vehiculis {
@@ -227,7 +320,6 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
 }
-
 
 .vehiculis-titulus {
   height: 5.5rem; /* 88px */
@@ -250,13 +342,11 @@ onMounted(() => {
 
 .item > img {
   width: 450px;
-
 }
 
-
 .unus {
-  background-color: rgba(220, 220, 220, 0.2) ;
-  order: 2; 
+  background-color: rgba(220, 220, 220, 0.2);
+  order: 2;
 }
 
 .duo {
@@ -265,28 +355,27 @@ onMounted(() => {
 
 .tribus {
   background-color: rgba(220, 220, 220, 0.8);
-  order: 3
+  order: 3;
 }
- 
-.notitia{
+
+.notitia {
   width: 90%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-
 .notitia > small {
   font-weight: bold;
   padding: 1rem;
 }
- 
+
 .notitia > h2 {
- font-size: 1.7rem; 
- font-weight: 600;
- color: rgba(0, 0, 0, 0.7);
- padding-bottom: 1rem;
-} 
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.7);
+  padding-bottom: 1rem;
+}
 
 @media (min-width: 640px) {
   #vehiculis {
@@ -299,19 +388,18 @@ onMounted(() => {
     max-width: 900px;
   }
 
-  .item{
+  .item {
     flex-direction: row;
     height: 320px;
   }
 
-  .notitia{
+  .notitia {
     width: 40%;
   }
 
   .unus > img {
     order: -1;
   }
-
 }
 
 @media (min-width: 1024px) {
@@ -324,15 +412,12 @@ onMounted(() => {
     height: 560px;
   }
 
-.vehiculis-arca {
-  flex-direction: row;
-
-}
-
-.notitia{
-    width: 90%;
+  .vehiculis-arca {
+    flex-direction: row;
   }
 
+  .notitia {
+    width: 90%;
+  }
 }
-
 </style>

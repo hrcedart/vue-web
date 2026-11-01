@@ -7,7 +7,8 @@ import Button from "@/components/ui/button/Button.vue";
   <div
     class="bg-simpsons-yellow min-h-screen text-center p-4 flex flex-col items-center justify-center"
   >
-    <LogoSimpsons estilus="w-[24rem] sm:w-[53rm]" />
+    <LogoSimpsons estilus="w-[24rem] sm:w-[35rm]" />
+
     <h1 class="text-xl my-1 font-medium">
       Discover some of the most amazing Quotes from The Simpsons
     </h1>

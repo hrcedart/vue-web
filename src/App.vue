@@ -4,6 +4,7 @@ import "vue-sonner/style.css";
 </script>
 
 <template>
+  
   <RouterView />
 
   <SonnerToaster />

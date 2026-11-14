@@ -32,9 +32,6 @@ const quaestio = ref<string>("");
     <p class="text-lg md:text-2xl transition-all">Aprendiendo a crear aplicaciones web</p>
 
     <div class="z-10">
-      <!-- <Button variant="domus" class="mr-2">
-     <RouterLink to="/indecision">Si o No</RouterLink>
-    </Button> --->
       <Dialog :open="dialogApertaEst" @update:open="dialogApertaEst = $event">
         <DialogTrigger as-child>
           <Button variant="domus" class="mr-2"> Sí o no </Button>
@@ -52,6 +49,7 @@ const quaestio = ref<string>("");
             <Input
               class="bg-domus-navy-input text-white placeholder:text-gray-400"
               placeholder="Escribe aquí tu pregunta..."
+              v-model="quaestio"
             />
           </div>
         </DialogContent>
